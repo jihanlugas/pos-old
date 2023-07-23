@@ -1,0 +1,75 @@
+@startuml
+
+!define type(x) <color:green>""x""</color>
+
+entity "users" <<(P,LightGreen)>> {
+    id: type(varchar) [PK]
+    --
+    role_id: type(varchar)
+    email: type(varchar)
+    username: type(varchar)
+    no_hp: type(varchar)
+    fullname: type(varchar)
+    passwd: type(varchar)
+    pass_version: type(varchar)
+    is_active: type(bool)
+    photo_id: type(varchar)
+    last_login_dt: type(timestampTz)
+    create_by: type(varchar)
+    create_dt: type(timestampTz)
+    update_by: type(varchar)
+    update_dt: type(timestampTz)
+    delete_by: type(varchar)
+    delete_dt: type(timestampTz)
+}
+
+entity "companies" <<(P,LightGreen)>> {
+    id: type(varchar) [PK]
+    --
+    name: type(varchar)
+    create_by: type(varchar)
+    create_dt: type(timestampTz)
+    update_by: type(varchar)
+    update_dt: type(timestampTz)
+    delete_by: type(varchar)
+    delete_dt: type(timestampTz)
+}
+
+entity "usercompanies" <<(P,LightGreen)>> {
+    id: type(varchar) [PK]
+    --
+    user_id: type(varchar)
+    company_id: type(varchar)
+    is_default_company: type(bool)
+    is_creator: type(bool)
+    create_by: type(varchar)
+    create_dt: type(timestampTz)
+    update_by: type(varchar)
+    update_dt: type(timestampTz)
+    delete_by: type(varchar)
+    delete_dt: type(timestampTz)
+}
+
+entity "companysettings" <<(P,LightGreen)>> {
+    id: type(varchar) [PK]
+    --
+}
+
+entity "items" <<(P,LightGreen)>> {
+    id: type(varchar) [PK]
+    --
+}
+
+entity "itemvariants" <<(P,LightGreen)>> {
+    id: type(varchar) [PK]
+    --
+    item_id: type(varchar)
+}
+
+users --{ usercompanies
+companies --{ usercompanies
+companies -- companysettings
+items --{ itemvariants
+
+
+@enduml

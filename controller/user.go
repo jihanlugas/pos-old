@@ -76,7 +76,7 @@ func (h User) SignIn(c echo.Context) error {
 		return response.Error(http.StatusBadRequest, "invalid username or password", response.Payload{}).SendJSON(c)
 	}
 
-	err = conn.Where("user_id = ? ", user.ID).Where("default_company = ? ", true).First(&usercompany).Error
+	err = conn.Where("user_id = ? ", user.ID).Where("is_default_company = ? ", true).First(&usercompany).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return response.Error(http.StatusBadRequest, "data not found", response.Payload{}).SendJSON(c)
@@ -109,4 +109,32 @@ func (h User) SignIn(c echo.Context) error {
 
 func (h User) SignOut(c echo.Context) error {
 	return response.Success(http.StatusOK, "success", response.Payload{}).SendJSON(c)
+}
+
+// RefreshToken godoc
+// @Tags Authentication
+// @Summary To do refresh token
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Success      200  {object}	response.Response
+// @Failure      500  {object}  response.Response
+// @Router /refresh-token [get]
+func (h User) RefreshToken(c echo.Context) error {
+	var err error
+
+	loginUser, err := getUserLoginInfo(c)
+	if err != nil {
+		errorInternal(c, err)
+	}
+
+	expiredAt := time.Now().Add(time.Hour * time.Duration(config.AuthTokenExpiredHour))
+	token, err := CreateToken(loginUser.UserID, loginUser.RoleID, loginUser.CompanyID, loginUser.PassVersion, expiredAt)
+	if err != nil {
+		return response.ErrorForce(http.StatusBadRequest, "Failed generate token", response.Payload{}).SendJSON(c)
+	}
+
+	return response.Success(http.StatusOK, "success", response.Payload{
+		"token": token,
+	}).SendJSON(c)
 }

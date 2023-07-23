@@ -11,7 +11,7 @@ type UserView struct {
 	Fullname    string     `json:"fullname"`
 	Passwd      string     `json:"-"`
 	PassVersion int        `json:"passVersion"`
-	Active      bool       `json:"active"`
+	IsActive    bool       `json:"isActive"`
 	LastLoginDt *time.Time `json:"lastLoginDt"`
 	PhotoID     string     `json:"photoId"`
 	PhotoUrl    string     `json:"photoUrl"`

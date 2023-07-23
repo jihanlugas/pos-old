@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/jihanlugas/pos/config"
+	"github.com/jihanlugas/pos/constant"
 	"github.com/jihanlugas/pos/controller"
+	"github.com/jihanlugas/pos/db"
+	"github.com/jihanlugas/pos/model"
 	"github.com/jihanlugas/pos/response"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -14,8 +17,8 @@ import (
 )
 
 func Init() *echo.Echo {
-
 	router := websiteRouter()
+	checkToken := checkTokenMiddleware()
 
 	userController := controller.UserComposer()
 
@@ -24,7 +27,7 @@ func Init() *echo.Echo {
 	router.GET("/", controller.Ping)
 	router.POST("/sign-in", userController.SignIn)
 	router.GET("/sign-out", userController.SignOut)
-	//router.GET("/refresh-token", userController.RefreshToken, checkToken)
+	router.GET("/refresh-token", userController.RefreshToken, checkToken)
 
 	return router
 
@@ -71,5 +74,34 @@ func httpErrorHandler(err error, c echo.Context) {
 	} else {
 		b := []byte("{error: true, message: \"unresolved error\"}")
 		_ = c.Blob(code, echo.MIMEApplicationJSONCharsetUTF8, b)
+	}
+}
+
+func checkTokenMiddleware() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			var err error
+
+			userLogin, err := controller.ExtractClaims(c.Request().Header.Get(config.HeaderAuthName))
+			if err != nil {
+				return response.ErrorForce(http.StatusUnauthorized, err.Error(), response.Payload{}).SendJSON(c)
+			}
+
+			conn, closeConn := db.GetConnection()
+			defer closeConn()
+
+			var user model.User
+			err = conn.Where("id = ? ", userLogin.UserID).First(&user).Error
+			if err != nil {
+				return response.ErrorForce(http.StatusUnauthorized, "Token Expired!", response.Payload{}).SendJSON(c)
+			}
+
+			if user.PassVersion != userLogin.PassVersion {
+				return response.ErrorForce(http.StatusUnauthorized, "Token Expired~", response.Payload{}).SendJSON(c)
+			}
+
+			c.Set(constant.TokenUserContext, userLogin)
+			return next(c)
+		}
 	}
 }

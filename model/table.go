@@ -13,7 +13,7 @@ type User struct {
 	Fullname    string     `gorm:"not null"`
 	Passwd      string     `gorm:"not null"`
 	PassVersion int        `gorm:"not null"`
-	Active      bool       `gorm:"not null"`
+	IsActive    bool       `gorm:"not null"`
 	PhotoID     string     `gorm:"not null"`
 	LastLoginDt *time.Time `gorm:"null"`
 	CreateBy    string     `gorm:"not null"`
