@@ -25,14 +25,16 @@ type User struct {
 }
 
 type Company struct {
-	ID       string     `gorm:"primaryKey"`
-	Name     string     `gorm:"not null"`
-	CreateBy string     `gorm:"not null"`
-	CreateDt time.Time  `gorm:"not null"`
-	UpdateBy string     `gorm:"not null"`
-	UpdateDt time.Time  `gorm:"not null"`
-	DeleteBy string     `gorm:"not null"`
-	DeleteDt *time.Time `gorm:"null"`
+	ID          string     `gorm:"primaryKey"`
+	Name        string     `gorm:"not null"`
+	Description string     `gorm:"not null"`
+	Address     string     `gorm:"not null"`
+	CreateBy    string     `gorm:"not null"`
+	CreateDt    time.Time  `gorm:"not null"`
+	UpdateBy    string     `gorm:"not null"`
+	UpdateDt    time.Time  `gorm:"not null"`
+	DeleteBy    string     `gorm:"not null"`
+	DeleteDt    *time.Time `gorm:"null"`
 }
 
 type Usercompany struct {
@@ -47,4 +49,40 @@ type Usercompany struct {
 	UpdateDt         time.Time  `gorm:"not null"`
 	DeleteBy         string     `gorm:"not null"`
 	DeleteDt         *time.Time `gorm:"null"`
+}
+
+type Companysettings struct {
+	ID       string     `gorm:"primaryKey"`
+	CreateBy string     `gorm:"not null"`
+	CreateDt time.Time  `gorm:"not null"`
+	UpdateBy string     `gorm:"not null"`
+	UpdateDt time.Time  `gorm:"not null"`
+	DeleteBy string     `gorm:"not null"`
+	DeleteDt *time.Time `gorm:"null"`
+}
+
+type Item struct {
+	ID          string     `gorm:"primaryKey"`
+	CompanyID   string     `gorm:"not null"`
+	Name        string     `gorm:"not null"`
+	Description string     `gorm:"not null"`
+	CreateBy    string     `gorm:"not null"`
+	CreateDt    time.Time  `gorm:"not null"`
+	UpdateBy    string     `gorm:"not null"`
+	UpdateDt    time.Time  `gorm:"not null"`
+	DeleteBy    string     `gorm:"not null"`
+	DeleteDt    *time.Time `gorm:"null"`
+}
+
+type Itemvariant struct {
+	ID          string     `gorm:"primaryKey"`
+	ItemID      string     `gorm:"not null"`
+	Name        string     `gorm:"not null"`
+	Description string     `gorm:"not null"`
+	CreateBy    string     `gorm:"not null"`
+	CreateDt    time.Time  `gorm:"not null"`
+	UpdateBy    string     `gorm:"not null"`
+	UpdateDt    time.Time  `gorm:"not null"`
+	DeleteBy    string     `gorm:"not null"`
+	DeleteDt    *time.Time `gorm:"null"`
 }

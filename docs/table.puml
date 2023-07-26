@@ -27,6 +27,8 @@ entity "companies" <<(P,LightGreen)>> {
     id: type(varchar) [PK]
     --
     name: type(varchar)
+    description: type(varchar)
+    address: type(varchar)
     create_by: type(varchar)
     create_dt: type(timestampTz)
     update_by: type(varchar)
@@ -58,17 +60,36 @@ entity "companysettings" <<(P,LightGreen)>> {
 entity "items" <<(P,LightGreen)>> {
     id: type(varchar) [PK]
     --
+    company_id: type(varchar)
+    name: type(varchar)
+    description: type(varchar)
+    create_by: type(varchar)
+    create_dt: type(timestampTz)
+    update_by: type(varchar)
+    update_dt: type(timestampTz)
+    delete_by: type(varchar)
+    delete_dt: type(timestampTz)
+
 }
 
 entity "itemvariants" <<(P,LightGreen)>> {
     id: type(varchar) [PK]
     --
     item_id: type(varchar)
+    name: type(varchar)
+    description: type(varchar)
+    create_by: type(varchar)
+    create_dt: type(timestampTz)
+    update_by: type(varchar)
+    update_dt: type(timestampTz)
+    delete_by: type(varchar)
+    delete_dt: type(timestampTz)
 }
 
 users --{ usercompanies
 companies --{ usercompanies
 companies -- companysettings
+companies --{ items
 items --{ itemvariants
 
 

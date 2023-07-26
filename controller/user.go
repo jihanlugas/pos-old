@@ -67,7 +67,7 @@ func (h User) SignIn(c echo.Context) error {
 		}
 	}
 
-	if !user.Active {
+	if !user.IsActive {
 		return response.Error(http.StatusBadRequest, "user not active", response.Payload{}).SendJSON(c)
 	}
 

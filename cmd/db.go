@@ -84,6 +84,18 @@ func up() {
 	if err != nil {
 		panic(err)
 	}
+	err = conn.Migrator().AutoMigrate(&model.Companysettings{})
+	if err != nil {
+		panic(err)
+	}
+	err = conn.Migrator().AutoMigrate(&model.Item{})
+	if err != nil {
+		panic(err)
+	}
+	err = conn.Migrator().AutoMigrate(&model.Itemvariant{})
+	if err != nil {
+		panic(err)
+	}
 
 	// view
 	vUser := conn.Model(&model.User{}).
@@ -105,6 +117,27 @@ func up() {
 		Joins("left join users u1 on u1.id = usercompanies.create_by").
 		Joins("left join users u2 on u2.id = usercompanies.update_by").
 		Joins("left join users u3 on u3.id = usercompanies.delete_by")
+
+	vCompanysetting := conn.Model(&model.Companysettings{}).
+		Select("companysettings.*, companies.name, u1.fullname as create_name, u2.fullname as update_name, u3.fullname as delete_name").
+		Joins("join companies on companies.id = companysettings.id ").
+		Joins("left join users u1 on u1.id = companysettings.create_by").
+		Joins("left join users u2 on u2.id = companysettings.update_by").
+		Joins("left join users u3 on u3.id = companysettings.delete_by")
+
+	vItem := conn.Model(&model.Item{}).
+		Select("items.*, companies.name as company_name, u1.fullname as create_name, u2.fullname as update_name, u3.fullname as delete_name").
+		Joins("join companies on companies.id = items.company_id").
+		Joins("left join users u1 on u1.id = items.create_by").
+		Joins("left join users u2 on u2.id = items.update_by").
+		Joins("left join users u3 on u3.id = items.delete_by")
+
+	vItemvariant := conn.Model(&model.Itemvariant{}).
+		Select("itemvariants.*, items.name as item_name, u1.fullname as create_name, u2.fullname as update_name, u3.fullname as delete_name").
+		Joins("join items on items.id = itemvariants.item_id").
+		Joins("left join users u1 on u1.id = itemvariants.create_by").
+		Joins("left join users u2 on u2.id = itemvariants.update_by").
+		Joins("left join users u3 on u3.id = itemvariants.delete_by")
 
 	err = conn.Migrator().CreateView("users_view", gorm.ViewOption{
 		Replace: true,
@@ -130,6 +163,30 @@ func up() {
 		panic(err)
 	}
 
+	err = conn.Migrator().CreateView("companysettings_view", gorm.ViewOption{
+		Replace: true,
+		Query:   vCompanysetting,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	err = conn.Migrator().CreateView("items_view", gorm.ViewOption{
+		Replace: true,
+		Query:   vItem,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	err = conn.Migrator().CreateView("itemvariants_view", gorm.ViewOption{
+		Replace: true,
+		Query:   vItemvariant,
+	})
+	if err != nil {
+		panic(err)
+	}
+
 }
 
 func down() {
@@ -150,6 +207,18 @@ func down() {
 	if err != nil {
 		panic(err)
 	}
+	err = conn.Migrator().DropView("companysettings_view")
+	if err != nil {
+		panic(err)
+	}
+	err = conn.Migrator().DropView("items_view")
+	if err != nil {
+		panic(err)
+	}
+	err = conn.Migrator().DropView("itemvariants_view")
+	if err != nil {
+		panic(err)
+	}
 
 	// table
 	err = conn.Migrator().DropTable(&model.User{})
@@ -161,6 +230,18 @@ func down() {
 		panic(err)
 	}
 	err = conn.Migrator().DropTable(&model.Usercompany{})
+	if err != nil {
+		panic(err)
+	}
+	err = conn.Migrator().DropTable(&model.Companysettings{})
+	if err != nil {
+		panic(err)
+	}
+	err = conn.Migrator().DropTable(&model.Item{})
+	if err != nil {
+		panic(err)
+	}
+	err = conn.Migrator().DropTable(&model.Itemvariant{})
 	if err != nil {
 		panic(err)
 	}
@@ -193,6 +274,11 @@ func seed() {
 		{UserID: users[0].ID, CompanyID: companies[0].ID, IsDefaultCompany: true, IsCreator: true, CreateBy: users[0].ID, CreateDt: now, UpdateBy: users[0].ID, UpdateDt: now},
 	}
 	tx.Create(&usercompanies)
+
+	companysettings := []model.Companysettings{
+		{ID: companies[0].ID, CreateBy: users[0].ID, CreateDt: now, UpdateBy: users[0].ID, UpdateDt: now},
+	}
+	tx.Create(&companysettings)
 
 	err = tx.Commit().Error
 	if err != nil {
