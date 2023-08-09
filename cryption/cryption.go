@@ -6,7 +6,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
-	"github.com/jihanlugas/pos/config"
+	"github.com/jihanlugas/pos-old/config"
 	"io"
 )
 

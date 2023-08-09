@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"github.com/jihanlugas/pos/cryption"
-	"github.com/jihanlugas/pos/db"
-	"github.com/jihanlugas/pos/model"
-	"github.com/jihanlugas/pos/utils"
+	"github.com/jihanlugas/pos-old/cryption"
+	"github.com/jihanlugas/pos-old/db"
+	"github.com/jihanlugas/pos-old/model"
+	"github.com/jihanlugas/pos-old/utils"
 	"github.com/spf13/cobra"
 	"gorm.io/gorm"
 	"time"

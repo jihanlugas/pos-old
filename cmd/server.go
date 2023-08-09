@@ -3,9 +3,9 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"github.com/jihanlugas/pos/config"
-	"github.com/jihanlugas/pos/db"
-	"github.com/jihanlugas/pos/router"
+	"github.com/jihanlugas/pos-old/config"
+	"github.com/jihanlugas/pos-old/db"
+	"github.com/jihanlugas/pos-old/router"
 	"github.com/spf13/cobra"
 	"net/http"
 	"os"

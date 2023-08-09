@@ -1,6 +1,6 @@
 package main
 
-import "github.com/jihanlugas/pos/cmd"
+import "github.com/jihanlugas/pos-old/cmd"
 
 // @title           Swagger Rental App
 // @version         1.0

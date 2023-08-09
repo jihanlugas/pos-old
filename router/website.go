@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/jihanlugas/pos/controller"
+	"github.com/jihanlugas/pos-old/controller"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"net/http"

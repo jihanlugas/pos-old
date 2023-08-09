@@ -3,16 +3,16 @@ package router
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/jihanlugas/pos/config"
-	"github.com/jihanlugas/pos/constant"
-	"github.com/jihanlugas/pos/controller"
-	"github.com/jihanlugas/pos/db"
-	"github.com/jihanlugas/pos/model"
-	"github.com/jihanlugas/pos/response"
+	"github.com/jihanlugas/pos-old/config"
+	"github.com/jihanlugas/pos-old/constant"
+	"github.com/jihanlugas/pos-old/controller"
+	"github.com/jihanlugas/pos-old/db"
+	"github.com/jihanlugas/pos-old/model"
+	"github.com/jihanlugas/pos-old/response"
 	"github.com/labstack/echo/v4"
 	"net/http"
 
-	_ "github.com/jihanlugas/pos/docs"
+	_ "github.com/jihanlugas/pos-old/docs"
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
 

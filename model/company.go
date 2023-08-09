@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/jihanlugas/pos/utils"
+	"github.com/jihanlugas/pos-old/utils"
 	"gorm.io/gorm"
 	"time"
 )
